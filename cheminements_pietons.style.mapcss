@@ -9,6 +9,7 @@ meta {
     icon: "pedestrian_logo.svg";
     author: "nlehuby, Jungle Bus";
     link:"https://wiki.openstreetmap.org/wiki/FR:Cheminements_piétons";
+    baselanguage: "fr";
     version: "0.3";
 }
 

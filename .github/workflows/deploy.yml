@@ -1,0 +1,29 @@
+name: Build and deploy JOSM files
+
+on:
+  push:
+    branches-ignore:
+      - 'gh-pages'
+
+permissions:
+  contents: write
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build zip
+      run: |
+        make
+        mkdir -p output
+        cp cheminements_pietons_fr.style.zip output/cheminements_pietons_fr.style.zip
+        cp cheminements_pietons_fr.validator.zip output/cheminements_pietons_fr.validator.zip
+        cp README.md output/README.md
+    - name: Deploy
+      if: ${{ github.ref == 'refs/heads/main' }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: output
+        enable_jekyll: true
