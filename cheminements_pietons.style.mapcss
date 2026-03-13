@@ -1,0 +1,286 @@
+/*
+ * MapCSS de coloriage pour les cheminements piétons
+ *
+ */
+ 
+meta {
+    title: "FR:Cheminements piétons";
+    description: "Une meilleure visualisation des cheminements piétons";
+    icon: "pedestrian_logo.svg";
+    author: "nlehuby, Jungle Bus";
+    link:"https://wiki.openstreetmap.org/wiki/FR:Cheminements_piétons";
+    version: "0.3";
+}
+
+
+setting::highlight_missing_tags {
+    type: boolean;
+    label: tr("Mise en valeur des objets avec attributs manquants");
+    default: false;
+}
+
+
+way[highway=footway] {
+    color: #00cc00;
+    width: 1;
+}
+
+way[highway=footway][footway=sidewalk] {
+    width: 3;
+}
+
+way[highway=pedestrian] {
+    width: 5;
+}
+
+way[highway=path][path=crossing],
+way[highway=footway][footway=crossing] {
+	linecap: none;
+	linejoin:round;
+	dashes: 5,5;
+	color:green;
+	z-index:4.5
+}
+
+way[highway=footway][footway=ramp] {
+	width: 3;
+	linejoin:round;
+	dashes: 15,5;
+	color:green;
+	z-index:4.5
+}
+
+way|z-20[highway=footway][footway=crossing] {width:20;dashes: 5,3}
+way|z21-[highway=footway][footway=crossing] {width:25;dashes: 6,3}
+way|z22[highway=footway][footway=crossing] {width:25;dashes: 7,5}
+way|z23[highway=footway][footway=crossing] {width:25;dashes: 8,7}
+way|z24-[highway=footway][footway=crossing] {width:25;dashes: 10, 12  }
+way|z-20[highway=path][path=crossing] {width:20;dashes: 5,3}
+way|z21-[highway=path][path=crossing] {width:25;dashes: 6,3}
+way|z22[highway=path][path=crossing] {width:25;dashes: 7,5}
+way|z23[highway=path][path=crossing] {width:25;dashes: 8,7}
+way|z24-[highway=path][path=crossing] {width:25;dashes: 10, 12  }
+
+
+way[highway=footway][footway=traffic_island] {
+    width: 3;
+    color: green;
+}
+way|z19-[highway=footway][footway=island],
+way|z19-[highway=footway][footway=traffic_island] {
+    width: 2;
+    color: green;
+}
+way|z19-[highway=footway][footway=island]::sidewalks_left,
+way|z19-[highway=footway][footway=traffic_island]::sidewalks_left {
+    offset: 10;
+    width: 5;
+    color: green;
+    dashes: 5;
+}
+way|z19-[highway=footway][footway=island]::sidewalks_right,
+way|z19-[highway=footway][footway=traffic_island]::sidewalks_right {
+    offset: -10;
+    width: 5;
+    color: green;
+    dashes: 5;
+}
+
+way[highway=footway][footway=link] {
+    width: 3;
+    color: #5bd143;
+    dashes: 2, 4;
+}
+
+way[highway=footway][footway=alley],
+way[highway=footway][footway=access_aisle],
+way[highway=footway][footway=access] {
+    width: 2;
+    dashes: 5, 10;
+}
+
+way[highway=footway][fake=yes] {
+    width: 2;
+    color: #43d1a2;
+    dashes: 5, 5;
+}
+
+node|z20-[highway=bus_stop][setting("highlight_missing_tags")][!public_transport]::stop_bg,
+node|z20-[public_transport=platform][setting("highlight_missing_tags")][!highway]::stop_bg {
+    symbol-shape: circle;
+    symbol-fill-color: none;
+    symbol-size: 24;
+    symbol-stroke-width: 4;
+    symbol-stroke-color: black;
+    object-z-index: -0.9;
+}
+
+node|z20-[path=crossing][setting("highlight_missing_tags")][!crossing]::crossing_bg,
+node|z20-[path=crossing][setting("highlight_missing_tags")][!crossing:markings]::crossing_bg,
+node|z20-[path=crossing][setting("highlight_missing_tags")][!crossing:signals]::crossing_bg,
+node|z20-[highway=crossing][setting("highlight_missing_tags")][!crossing]::crossing_bg,
+node|z20-[highway=crossing][setting("highlight_missing_tags")][!crossing:markings]::crossing_bg,
+node|z20-[highway=crossing][setting("highlight_missing_tags")][!crossing:signals]::crossing_bg {
+    symbol-shape: hexagon;
+    symbol-fill-color: none;
+    symbol-size: 24;
+    symbol-stroke-width: 4;
+    symbol-stroke-color: black;
+    object-z-index: -0.9;
+}
+
+way[highway=cycleway][segregated] {
+    width: 1;
+    color: bicycle#b100ff;
+    set cyclecolor;
+    dashes: 14,14;
+    dashes-background-color: foot#00ff00;
+}
+
+way[highway=path][setting("highlight_missing_tags")][!surface][!smoothness]::flooring_layer,
+way[highway=path][setting("highlight_missing_tags")][!surface][smoothness]::flooring_layer,
+way[highway=path][setting("highlight_missing_tags")][surface][!smoothness]::flooring_layer,
+way[highway=pedestrian][setting("highlight_missing_tags")][!surface][!smoothness]::flooring_layer,
+way[highway=pedestrian][setting("highlight_missing_tags")][surface][!smoothness]::flooring_layer,
+way[highway=pedestrian][setting("highlight_missing_tags")][!surface][smoothness]::flooring_layer,
+way[highway=living_street][setting("highlight_missing_tags")][!surface][!smoothness]::flooring_layer,
+way[highway=living_street][setting("highlight_missing_tags")][surface][!smoothness]::flooring_layer,
+way[highway=living_street][setting("highlight_missing_tags")][!surface][smoothness]::flooring_layer,
+way[highway=footway][setting("highlight_missing_tags")][footway!=link][!surface][!smoothness]::flooring_layer,
+way[highway=footway][setting("highlight_missing_tags")][footway!=link][surface][!smoothness]::flooring_layer,
+way[highway=footway][setting("highlight_missing_tags")][footway!=link][!surface][smoothness]::flooring_layer{
+    width: 9;
+    color: black;
+    opacity: 0.8;
+    object-z-index: -0.8;
+}
+
+
+node|z20-[highway=bus_stop][setting("highlight_missing_tags")][!departures_board]::stop_bg,
+node|z20-[highway=bus_stop][setting("highlight_missing_tags")][!tactile_paving]::stop_bg {
+    symbol-shape: circle;
+    symbol-fill-color: none;
+    symbol-size: 24;
+    symbol-stroke-width: 4;
+    symbol-stroke-color: black;
+    object-z-index: -0.9;
+}
+
+node|z20-[parking_space=disabled][setting("highlight_missing_tags")][!surface]::parking_bg,
+node|z20-[parking_space=disabled][setting("highlight_missing_tags")][!orientation]::parking_bg,
+node|z20-[parking_space=disabled][setting("highlight_missing_tags")][!capacity]::parking_bg {
+    symbol-shape: square;
+    symbol-fill-color: none;
+    symbol-size: 24;
+    symbol-stroke-width: 4;
+    symbol-stroke-color: black;
+    object-z-index: -0.9;
+}
+
+area[parking_space=disabled][setting("highlight_missing_tags")][!surface]::parking_bg,
+area[parking_space=disabled][setting("highlight_missing_tags")][!orientation]::parking_bg,
+area[parking_space=disabled][setting("highlight_missing_tags")][!capacity]::parking_bg {
+    width: 9;
+    color: black;
+    opacity: 0.8;
+    object-z-index: -2;
+}
+
+
+
+node|z20-[obstacle:wheelchair=yes]::obstacle_bg {
+    symbol-shape: circle;
+    symbol-fill-color: none;
+    symbol-size: 24;
+    symbol-stroke-width: 2;
+    symbol-stroke-color: green;
+    object-z-index: -0.9;
+}
+
+node|z20-[obstacle:blind=yes]::obstacle_bg {
+    symbol-shape: square;
+    symbol-fill-color: none;
+    symbol-size: 24;
+    symbol-stroke-width: 2;
+    symbol-stroke-color: green;
+    object-z-index: -0.9;
+}
+
+way[highway=~/^(motorway|trunk|primary|secondary|tertiary|residential|unclassified|service)$/],
+way[highway=~/^(motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$/]{
+    width: 2;
+    z-index: 0.02;
+    color: street#000;
+    dashes: list(2,1);
+}
+
+
+way[highway=steps][!incline] >[index=1] node,
+way[highway=steps][incline=up] >[index=1] node,
+way[highway=steps][incline=down] >[index=-1] node
+{
+	set .step_bottom;
+}
+
+way[highway=steps][!incline] >[index=-1] node,
+way[highway=steps][incline=up] >[index=-1] node,
+way[highway=steps][incline=down] >[index=1] node 
+{
+	set .step_top;
+}
+
+node.step_bottom,
+way[highway=footway][incline=up] >[index=1] node,
+way[highway=footway][incline=down] >[index=-1] node {
+    symbol-shape: triangle;
+}
+
+node.step_top,
+way[highway=footway][incline=up] >[index=-1] node,
+way[highway=footway][incline=down] >[index=1] node 
+{
+    symbol-shape: pentagon;
+}
+
+
+
+
+/* Add picto */
+
+area[parking_space=disabled] {
+    fill-extent: 20;
+    fill-color: blue;
+    icon-image: "presets/vehicle/parking/handicapped.svg";
+    width: 3;
+}
+
+node[parking_space=disabled] {
+    icon-image: "presets/vehicle/parking/handicapped.svg";
+}
+
+node[barrier=planter],
+node[man_made=planter] {
+    icon-image: "presets/craft/pottery.svg";
+}
+
+node[highway=traffic_sign] {
+    icon-image: "presets/vehicle/traffic_mirror.svg";
+}
+
+node[obstacle:wheelchair=yes]
+{
+	symbol-shape: circle;
+	symbol-size: 7;
+	symbol-fill-color: green;
+	symbol-fill-opacity: 1.0;
+	symbol-stroke-color: black;
+}
+
+node[obstacle:blind=yes]
+{
+	symbol-shape: square;
+	symbol-size: 7;
+	symbol-fill-color: green;
+	symbol-fill-opacity: 1.0;
+	symbol-stroke-color: black;
+}

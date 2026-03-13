@@ -1,0 +1,323 @@
+/*
+ * MapCSS de validation pour les cheminements piétons
+ *
+ */
+
+
+meta {
+    title: "FR:Cheminements piétons";
+    description: "Une meilleure visualisation des cheminements piétons";
+    icon: "pedestrian_logo.svg";
+    author: "nlehuby, Jungle Bus";
+    link:"https://wiki.openstreetmap.org/wiki/FR:Cheminements_piétons";
+    version: "0.3";
+}
+
+way[fixme],
+node[fixme] {
+	throwWarning: "Attribut fixme nécessitant peut-être une vérification";
+}
+
+*[wheelchair=limited][!wheelchair:description],
+*[wheelchair=bad][!wheelchair:description]{
+	throwWarning: "Ajouter wheelchair:description=* pour précider ce qui limite l'accès PMR";
+}
+
+way[highway=~/footway|pedestrian|path|living_street|steps/]  > node[entrance] {
+    set .connected_entrance;
+}
+
+node[entrance]!.connected_entrance:in-downloaded-area {
+    throwWarning: "Entrée non connectée aux cheminements piétons";
+}
+
+way[highway][highway=~/footway|pedestrian|path|living_street|steps/] >[index=-1] node[!noexit][!amenity][fixme!=continue]!:connection:in-downloaded-area,
+way[highway][highway=~/footway|pedestrian|path|living_street|steps/] >[index=1] node[!noexit][!amenity][fixme!=continue]!:connection:in-downloaded-area{
+	throwError: "Cheminement non connecté aux autres cheminements piétons";
+}
+
+node[highway=elevator]!:connection:in-downloaded-area {
+	throwWarning: "Ascenseur non connecté aux cheminements piétons";
+}
+
+node[footway=crossing] {
+	throwError: "Noeud passage piéton avec un attribut de chemin (footway=*)";
+}
+
+node[footway][footway!=crossing] {
+	throwError: "Le cheminement ne peut être un point";
+}
+
+way[path=crossing] > node[highway=crossing],
+way[footway=crossing] > node[highway=crossing] {
+	set .crossing_nodes_ok;
+}
+
+node[highway=crossing]:in-downloaded-area!.crossing_nodes_ok {
+	throwWarning: "Il manque un footway=crossing autour du noeud de passage piéton";
+}
+
+node[highway=crossing] < way[path=crossing],
+node[highway=crossing] < way[footway=crossing] {
+    set .crossing_with_node;
+}
+
+way[path=crossing]!.crossing_with_node,
+way[footway=crossing]!.crossing_with_node {
+    throwError: "Il manque un noeud highway=crossing pour ce passage piéton";
+}
+
+way[path=crossing] >[index=-1] node[!kerb][!barrier],
+way[path=crossing] >[index=1] node[!kerb][!barrier],
+way[footway=crossing] >[index=-1] node[!kerb][!barrier],
+way[footway=crossing] >[index=1] node[!kerb][!barrier] {
+    throwWarning: "Il manque une bordure de trottoir (kerb) à l'extrémité de ce passage piéton";
+	fixAdd: "barrier=kerb";
+}
+
+
+/* Vérification des tags de passage piéton qu'on peut mettre à deux endroits différents */
+
+node[highway=crossing][tag("crossing")!=parent_tag("crossing")][crossing] < way[path=crossing][crossing],
+node[highway=crossing][tag("crossing")!=parent_tag("crossing")][crossing] < way[footway=crossing][crossing] {
+	throwWarning: "Tag crossing différent entre le noeud et le chemin";
+	fixRemove: "crossing";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("crossing:markings")!=parent_tag("crossing:markings")][crossing:markings] < way[path=crossing][crossing:markings],
+node[highway=crossing][tag("crossing:markings")!=parent_tag("crossing:markings")][crossing:markings] < way[footway=crossing][crossing:markings] {
+	throwWarning: "Tag crossing:markings différent entre le noeud et le chemin";
+	fixRemove: "crossing:markings";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("crossing:markings:condition")!=parent_tag("crossing:markings:condition")][crossing:markings:condition] < way[path=crossing][crossing:markings:condition],
+node[highway=crossing][tag("crossing:markings:condition")!=parent_tag("crossing:markings:condition")][crossing:markings:condition] < way[footway=crossing][crossing:markings:condition] {
+	throwWarning: "Tag crossing:markings:condition différent entre le noeud et le chemin";
+	fixRemove: "crossing:markings:condition";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("crossing:island")!=parent_tag("crossing:island")][crossing:island] < way[path=crossing][crossing:island],
+node[highway=crossing][tag("crossing:island")!=parent_tag("crossing:island")][crossing:island] < way[footway=crossing][crossing:island] {
+	throwWarning: "Tag crossing:island différent entre le noeud et le chemin";
+	fixRemove: "crossing:island";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("crossing:signals")!=parent_tag("crossing:signals")][crossing:signals] < way[path=crossing][crossing:signals],
+node[highway=crossing][tag("crossing:signals")!=parent_tag("crossing:signals")][crossing:signals] < way[footway=crossing][crossing:signals] {
+	throwWarning: "Tag crossing:signals différent entre le noeud et le chemin";
+	fixRemove: "crossing:signals";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("crossing:light")!=parent_tag("crossing:light")][crossing:light] < way[path=crossing][crossing:light],
+node[highway=crossing][tag("crossing:light")!=parent_tag("crossing:light")][crossing:light] < way[footway=crossing][crossing:light] {
+	throwWarning: "Tag crossing:light différent entre le noeud et le chemin";
+	fixRemove: "crossing:light";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("flashing_lights")!=parent_tag("flashing_lights")][flashing_lights] < way[path=crossing][flashing_lights],
+node[highway=crossing][tag("flashing_lights")!=parent_tag("flashing_lights")][flashing_lights] < way[footway=crossing][flashing_lights] {
+	throwWarning: "Tag flashing_lights différent entre le noeud et le chemin";
+	fixRemove: "flashing_lights";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("button_operated")!=parent_tag("button_operated")][button_operated] < way[path=crossing][button_operated],
+node[highway=crossing][tag("button_operated")!=parent_tag("button_operated")][button_operated] < way[footway=crossing][button_operated] {
+	throwWarning: "Tag button_operated différent entre le noeud et le chemin";
+	fixRemove: "button_operated";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("traffic_signals:sound")!=parent_tag("traffic_signals:sound")][traffic_signals:sound] < way[path=crossing][traffic_signals:sound],
+node[highway=crossing][tag("traffic_signals:sound")!=parent_tag("traffic_signals:sound")][traffic_signals:sound] < way[footway=crossing][traffic_signals:sound] {
+	throwWarning: "Tag traffic_signals:sound différent entre le noeud et le chemin";
+	fixRemove: "traffic_signals:sound";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("traffic_signals:floor_vibration")!=parent_tag("traffic_signals:floor_vibration")][traffic_signals:floor_vibration] < way[path=crossing][traffic_signals:floor_vibration],
+node[highway=crossing][tag("traffic_signals:floor_vibration")!=parent_tag("traffic_signals:floor_vibration")][traffic_signals:floor_vibration] < way[footway=crossing][traffic_signals:floor_vibration] {
+	throwWarning: "Tag traffic_signals:floor_vibration différent entre le noeud et le chemin";
+	fixRemove: "traffic_signals:floor_vibration";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("traffic_signals:vibration")!=parent_tag("traffic_signals:vibration")][traffic_signals:vibration] < way[path=crossing][traffic_signals:vibration],
+node[highway=crossing][tag("traffic_signals:vibration")!=parent_tag("traffic_signals:vibration")][traffic_signals:vibration] < way[footway=crossing][traffic_signals:vibration] {
+	throwWarning: "Tag traffic_signals:vibration différent entre le noeud et le chemin";
+	fixRemove: "traffic_signals:vibration";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("supervised")!=parent_tag("supervised")][supervised] < way[path=crossing][supervised],
+node[highway=crossing][tag("supervised")!=parent_tag("supervised")][supervised] < way[footway=crossing][supervised] {
+	throwWarning: "Tag supervised différent entre le noeud et le chemin";
+	fixRemove: "supervised";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][tag("crossing:bollard")!=parent_tag("crossing:bollard")][crossing:bollard] < way[path=crossing][crossing:bollard],
+node[highway=crossing][tag("crossing:bollard")!=parent_tag("crossing:bollard")][crossing:bollard] < way[footway=crossing][crossing:bollard] {
+	throwWarning: "Tag crossing:bollard différent entre le noeud et le chemin";
+	fixRemove: "crossing:bollard";
+	group: "Tags des passages piétons à vérifier";
+} /* NB : crossing:bollard est plutôt un attribut pour la bordure de trottoir en fait*/
+
+way[footway=crossing][tactile_paving],
+way[path=crossing][tactile_paving] {
+	throwWarning: "Y a-t-il vraiment une bande de guidage le long de ce passage piéton ? (tag tactile_paving à supprimer si non)";
+	fixRemove: "tactile_paving";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing]:in-downloaded-area[crossing:markings=yes] {
+	throwWarning: "Quel est le marquage du passage piéton (le tag crossing:markings=yes est trop imprécis)";
+	fixAdd: "crossing:markings=zebra";
+	group: "Tags des passages piétons à vérifier";
+}
+
+way[footway=crossing][kerb],
+way[path=crossing][kerb] {
+	throwError: "Si c'est un passage piéton, ce n'est probablement pas une bordure de trottoir (tag kerb à retirer)";
+	fixRemove: "kerb";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][crossing=traffic_signals] < way[path=crossing][crossing:signals=no],
+node[highway=crossing][crossing=traffic_signals] < way[footway=crossing][crossing:signals=no] {
+	throwError: "Y-a-t-il un feu à ce passage piéton ? (incohérence entre les attributs du noeud et du chemin)";
+	fixRemove: "crossing:signals";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][crossing][crossing!=traffic_signals] < way[path=crossing][crossing:signals=yes],
+node[highway=crossing][crossing][crossing!=traffic_signals] < way[footway=crossing][crossing:signals=yes] {
+	throwError: "Y-a-t-il un feu à ce passage piéton ? (incohérence entre les attributs du noeud et du chemin)";
+	fixRemove: "crossing:signals";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][crossing!=traffic_signals][crossing][crossing:signals=yes]{
+	throwError: "Y-a-t-il un feu à ce passage piéton ? (incohérence entre les attributs crossing et crossing:signals)";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][crossing=traffic_signals][crossing:signals][crossing:signals!=yes]{
+	throwError: "Y-a-t-il un feu à ce passage piéton ? (incohérence entre les attributs crossing et crossing:signals)";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][crossing=traffic_signals][!crossing:signals]{
+	throwWarning: "S'il y a un feu à ce passage piéton, ajouter crossing:signals=yes";
+	fixAdd: "crossing:signals=yes";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][crossing=unmarked][!crossing:markings]{
+	throwWarning: "S'il n'y a pas de marquage au sol à ce passage piéton, ajouter crossing:markings=no";
+	fixAdd: "crossing:markings=no";
+	group: "Tags des passages piétons à vérifier";
+}
+
+node[highway=crossing][crossing=unmarked][crossing:markings][crossing:markings!=no]{
+	throwError: "Y-a-t-il un marquage au sol à ce passage piéton ? (incohérence entre les attributs crossing et crossing:markings)";
+	group: "Tags des passages piétons à vérifier";
+}
+
+way[footway=crossing] > node[highway=crossing][kerb][kerb!=separate]{
+	throwWarning: "Déplacer le tag kerb sur les extrémités du passage piéton";
+	group: "Tags de bordures de passages piétons à déplacer";
+}
+
+way[footway=crossing] > node[highway=crossing][tactile_paving][tactile_paving!=separate]{
+	throwWarning: "Déplacer le tag tactile_paving sur les extrémités du passage piéton";
+	group: "Tags de bordures de passages piéton à déplacer";
+}
+
+way[footway=crossing] > node[highway=crossing][tactile_paving:condition][tactile_paving:condition!=separate]{
+	throwWarning: "Déplacer le tag tactile_paving:condition sur les extrémités du passage piéton";
+	group: "Tags de bordures de passages piétons à déplacer";
+}
+
+way[footway=crossing] > node[highway=crossing][crossing:bollard][crossing:bollard!=separate]{
+	throwWarning: "Déplacer le tag crossing:bollard sur les extrémités du passage piéton";
+	group: "Tags de bordures de passages piétons à déplacer";
+}
+
+way[footway=crossing] > node[highway=crossing][kerb:height]{
+	throwWarning: "Déplacer le tag kerb:height sur les extrémités du passage piéton";
+	group: "Tags de bordures de passages piétons à déplacer";
+}
+
+/*  fin de getion des attributs de passage piéton */
+
+/* Modélisation reconnues mais déconseillées */
+node[crossing=informal][highway=crossing]{
+	throwWarning: "Attribut crossing=informal déconseillé (utiliser crossing=uncontrolled/unmarked et crossing:markings=no)";
+	fixAdd: "crossing:markings=no";
+	fixAdd: "crossing=uncontrolled";
+}
+
+node[crossing=zebra]{
+	throwWarning: "Attribut crossing=unmarked imprécis et déconseillé (utiliser crossing=uncontrolled/traffic_signals et crossing:markings=no)";
+	fixAdd: "crossing:markings=zebra";
+	fixAdd: "crossing=uncontrolled";
+}
+
+
+node[crossing=marked]{
+	throwWarning: "Attribut crossing=marked imprécis et déconseillé (utiliser crossing=uncontrolled/traffic_signals et crossing:markings=*)";
+	fixAdd: "crossing=uncontrolled";
+}
+
+*[amenity=parking_space][!parking_space][wheelchair=yes],
+*[amenity=parking_space][!parking_space][wheelchair=designated],
+*[amenity=parking_space][!parking_space][access:disabled],
+*[amenity=parking_space][!parking_space][capacity:disabled]{
+	throwWarning: "Est-ce une place de parking réservée PMR ? (ajouter parking_space=disabled)";
+	fixAdd: "parking_space=disabled";
+}
+
+area[amenity=parking_space][parking_space=disabled][!capacity:disabled]{
+	throwWarning: "Combien y-a-t-il de places réservées PMR ici ? (ajouter capacity:disabled=*)";
+}
+
+area[highway=elevator]{
+	throwWarning: "Modélisation d'ascenseur imprécise et déconseillée (utiliser highway=elevator sur un noeud dans la cabine, et indoor=room sur la cabine elle-même)";
+	fixAdd: "indoor=room";
+	fixAdd: "room=elevator";
+	fixAdd: "elevator=yes";
+	fixRemove: "highway";
+}
+
+/* Fin des modélisations déconseillées */
+
+way[highway=steps][!incline] {
+	throwWarning: "Attribut manquant : direction de l'escalier (tag incline)";
+}
+
+way[footway=ramp][!incline] {
+	throwWarning: "Attribut manquant : direction de la rampe (tag incline)";
+}
+
+
+
+
+way[highway=cycleway][segregated][!foot] {
+	throwWarning: "S'agit-il d'une piste cyclable partagée accessible aux piétons ? (ajouter foot=yes ou retirer segregated=*)";
+	fixRemove: "segregated";
+}
+
+way[highway=~/footway|pedestrian|path|living_street|steps/][waylength()> 250]!:closed {
+    throwWarning: "Ce cheminement est très long, est-il pertinent de le découper ?";
+}
+
+
+
+
