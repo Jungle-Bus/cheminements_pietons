@@ -19,6 +19,7 @@ jobs:
         mkdir -p output
         cp cheminements_pietons_fr.style.zip output/cheminements_pietons_fr.style.zip
         cp cheminements_pietons_fr.validator.zip output/cheminements_pietons_fr.validator.zip
+        cp cheminements_pietons_fr.preset.zip output/cheminements_pietons_fr.preset.zip
         cp README.md output/README.md
     - name: Deploy
       if: ${{ github.ref == 'refs/heads/main' }}

@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<presets xmlns="http://josm.openstreetmap.de/tagging-preset-1.0"
+	shortdescription="Cheminements Piétons"
+	link="https://wiki.openstreetmap.org/wiki/FR:Cheminements_piétons"
+	author="nlehuby, Jungle Bus"
+	icon="pedestrian_logo.svg"
+	baselanguage="fr"
+	version="0.3"
+	description="presets pour la cartographie des cheminements piétons">
+	<chunk id="flooring">
+		<combo key="surface" text="Surface"
+			values="asphalt,concrete,paving_stones,sett,fine_gravel,grass,ground,wood,metal" />
+		<combo key="smoothness" text="Smoothness">
+			<list_entry value="excellent" />
+			<list_entry value="good" />
+			<list_entry value="intermediate" />
+			<list_entry value="bad" />
+			<list_entry value="horrible" />
+		</combo>
+	</chunk>
+
+	<group name="Cheminements Piétons" icon="pedestrian_logo.svg">
+		<group name="Formulaires">
+			<item name="Escalier" icon="presets/transport/way/steps.svg" type="way"
+				preset_name_label="true">
+				<link href="http://wiki.openstreetmap.org/wiki/Tag:highway=steps"
+					fr.href="http://wiki.openstreetmap.org/wiki/FR:Tag:highway=steps" />
+				<space />
+				<key key="highway" value="steps" />
+				<combo key="incline" text="Incline" values="up,down" default="up" />
+				<optional>
+					<combo key="tactile_paving" text="BEV"
+						values="yes,partial,incorrect,no"
+						display_values="En haut et en bas,En haut,En bas,Pas de BEV" />
+					<combo key="handrail" text="Main Courante"
+						values="right,left,center,both,no"
+						display_values="À droite,À gauche,Au milieu,Des deux côtés,Pas de main courante" />
+				</optional>
+			</item>
+			<item name="Rampe" icon="presets/transport/passage/tunnel_avalanche_protector.svg"
+				type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="ramp" />
+				<combo key="incline" text="Incline" values="up,down" default="up" />
+				<combo key="handrail" text="Main Courante"
+					values="right,left,center,both,no"
+					display_values="À droite,À gauche,Au milieu,Des deux côtés,Pas de main courante" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Trottoir" icon="presets/transport/way/dedicated_footway.svg" type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="sidewalk" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Bandes de guidage" icon="presets/transport/railway/miniature_rail.svg"
+				type="way">
+				<key key="highway" value="footway" />
+				<key key="footway" value="guiding_strips" />
+				<key key="tactile_paving" value="yes" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Îlot de refuge" icon="presets/vehicle/island.svg" type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="traffic_island" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Chemin piéton" icon="presets/transport/way/dedicated_footway.svg" type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<combo key="footway" text="Type" values_context="footway">
+					<list_entry value="access_aisle"
+						short_description="Marked footpath in a parking lot" />
+					<list_entry value="link"
+						short_description="Footway sections that do not exist but are necessary for routing" />
+					<list_entry value="traffic_island"
+						short_description="Footway sections inside a crossing island" />
+					<list_entry value="alley"
+						short_description="Access for back entrances and/or emergency access" />
+				</combo>
+				<reference ref="flooring" />
+			</item>
+			<item name="Piste Cyclable Partagée" icon="presets/transport/way/way_bicycle_road.svg"
+				type="way" preset_name_label="true">
+				<link wiki="Tag:highway=path" />
+				<key key="highway" value="path" />
+				<key key="bicycle" value="designated" />
+				<key key="foot" value="designated" />
+				<reference ref="flooring" />
+				<check key="segregated"
+					text="Voies vélo et piéton séparées" />
+			</item>
+			<item name="Place piétonne" icon="presets/transport/way/way_pedestrian.svg"
+				type="closedway,multipolygon" preset_name_label="true">
+				<key key="highway" value="pedestrian" />
+				<key key="area" value="yes" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Rue piétonne" icon="presets/transport/way/way_pedestrian.svg" type="way"
+				preset_name_label="true">
+				<key key="highway" value="pedestrian" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Zone de rencontre" icon="presets/transport/way/way_pedestrian.svg"
+				living_streettype="way" preset_name_label="true">
+				<key key="highway" value="living_street" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Passage piéton" icon="presets/transport/way/way_living_street.svg"
+				type="way" preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="crossing" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Passage piéton partagé" type="way"
+				icon="presets/transport/way/combined_foot_cycleway.svg">
+				<key key="highway" value="path" />
+				<key key="path" value="crossing" />
+				<key key="foot" value="designated" />
+				<key key="bicycle" value="designated" />
+				<reference ref="flooring" />
+				<check key="segregated"
+					text="Voies vélo et piéton séparées" />
+			</item>
+			<item name="Noeud de passage piéton" icon="presets/vehicle/crossing.svg" type="node"
+				preset_name_label="true">
+				<key key="highway" value="crossing" />
+				<combo key="crossing" text="Pedestrian crossing type">
+					<list_entry value="uncontrolled" />
+					<list_entry value="traffic_signals" />
+					<list_entry value="unmarked" />
+				</combo>
+				<combo key="crossing:markings" text="Markings">
+					<list_entry value="zebra" icon="presets/vehicle/crossing_ref_zebra.svg" />
+					<list_entry value="surface" icon="presets/vehicle/crossing_markings_surface.svg" />
+					<list_entry value="pictograms" />
+					<list_entry value="no" icon="presets/vehicle/crossing_unmarked.svg" />
+				</combo>
+				<check key="crossing:island" text="With island" />
+				<optional>
+					<check key="tactile_paving" text="BEV" />
+					<check key="crossing:bollard" text="Potelets" />
+				</optional>
+			</item>
+			<item name="Quai de Tramway" icon="presets/transport/railway/tram.svg" type="node,way"
+				preset_name_label="true">
+				<key key="railway" value="platform" />
+				<key key="public_transport" value="platform" />
+				<key key="tram" value="yes" />
+				<key key="departures_board" value="realtime" match="none" />
+			</item>
+			<item name="Arrêt de Bus" icon="presets/transport/bus.svg" type="node"
+				preset_name_label="true">
+				<link wiki="Tag:highway=bus_stop" />
+				<key key="highway" value="bus_stop" />
+				<key key="public_transport" value="platform" match="none" />
+				<key key="bus" value="yes" match="none" />
+				<text key="name" text="Name" />
+				<key key="departures_board" value="timetable" match="none" />
+				<key key="operator" />
+				<key key="network" />
+				<key key="network:wikidata" />
+				<key key="operator:wikidata" />
+			</item>
+			<item name="Place de Parking Réservée PMR"
+				icon="presets/vehicle/parking/handicapped.svg" type="node,closedway"
+				preset_name_label="true">
+				<key key="amenity" value="parking_space" />
+				<key key="parking_space" value="disabled" />
+				<key key="capacity:disabled" value="1" />
+				<key key="capacity" value="1" />
+				<combo key="orientation" text="Orientation" values="diagonal,parallel,perpendicular" />
+				<reference ref="flooring" />
+			</item>
+			<item name="Mobilier publicitaire" icon="presets/leisure/poster_box.svg" type="node"
+				preset_name_label="true">
+				<key key="obstacle:wheelchair" value="yes" match="none" />
+				<combo key="advertising" text="Type de support"
+					values="billboard,column,poster_box,totem"
+					display_values="Sucette grand format (on passe en dessous),Colonne,Sucette petit format (à contourner),Totem" />
+			</item>
+			<item name="Obstacle au déplacement" icon="presets/barrier/log.svg" type="node"
+				preset_name_label="true">
+				<key key="obstacle:wheelchair" value="yes" match="key" />
+				<check key="visual_contrast" text="contraste visuel" />
+				<text key="maxwidth:physical" text="Largeur de passage (en contournant l'obstacle)" />
+				<text key="length" text="Longueur de l'obstacle" />
+				<text key="width" text="Largeur de l'obstacle" />
+				<text key="height" text="Hauteur de l'obstacle" />
+			</item>
+			<item name="Obstacle aveugles" icon="presets/barrier/height_restrictor.svg" type="node"
+				preset_name_label="true">
+				<key key="obstacle:blind" value="yes" match="key" />
+				<text key="min_height" text="Hauteur sous obstacle" />
+				<combo key="tactile_warning" text="Signalement tactile"
+					values_context="obstacle:blind">
+					<list_entry value="kerb"
+						short_description="surépaisseur au sol sous l'obstacle (au moins 3 cm)" />
+					<list_entry value="pole"
+						short_description="élément bas type pilier (à max 40 cm de hauteur)" />
+					<list_entry value="none"
+						short_description="Pas de rappel tactile" />
+				</combo>
+			</item>
+		</group>
+		<group name="Pré-remplissages">
+			<item name="Asphalte - Bon état" icon="presets/transport/way/way_trunk.svg"
+				type="node,way,closedway" preset_name_label="true">
+				<key key="surface" value="asphalt" match="none" />
+				<key key="smoothness" value="good" />
+			</item>
+			<item name="Noeud de passage piéton informel" icon="presets/transport/way/way_road.svg"
+				type="node" preset_name_label="true">
+				<key key="highway" value="crossing" />
+				<key key="crossing" value="unmarked" />
+				<key key="crossing:markings" value="no" />
+				<key key="crossing:island" value="no" />
+				<key key="crossing:signals" value="no" />
+			</item>
+			<item name="Noeud de passage piéton classique" icon="presets/transport/way/way_road.svg"
+				type="node" preset_name_label="true">
+				<key key="highway" value="crossing" />
+				<key key="crossing" value="uncontrolled" />
+				<key key="crossing:markings" value="zebra" />
+				<key key="crossing:island" value="no" />
+				<key key="crossing:signals" value="no" />
+			</item>
+		</group>
+		<group name="En 1 clic">
+			<group name="Obstacles">
+				<item name="Conteneur à recyclage"
+					icon="presets/service/recycling/recycling_container.svg" type="node"
+					preset_name_label="true">
+					<key key="amenity" value="recycling" />
+					<key key="recycling_type" value="container" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Boîte aux lettres" icon="presets/service/post_box.svg" type="node"
+					preset_name_label="true">
+					<key key="amenity" value="post_box" />
+					<key key="operator" value="La Poste" match="none" />
+					<key key="operator:wikidata" value="Q373724" match="none" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Lampadaire" icon="presets/misc/streetlamp.svg" type="node">
+					<key key="highway" value="street_lamp" />
+					<key key="support" value="pole" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Poteau" icon="presets/tower/pole.svg" type="node"
+					preset_name_label="true">
+					<key key="man_made" value="utility_pole" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Jardinière" icon="presets/craft/pottery.svg" type="node"
+					preset_name_label="true">
+					<key key="barrier" value="planter" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Arbre" icon="presets/landmark/trees.svg" type="node"
+					preset_name_label="true">
+					<key key="natural" value="tree" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Barrière à Vélo" icon="presets/barrier/cycle_barrier.svg" type="node"
+					preset_name_label="true">
+					<key key="barrier" value="cycle_barrier" />
+				</item>
+				<item name="Potelet" icon="presets/barrier/bollard.svg" type="node"
+					preset_name_label="true">
+					<key key="barrier" value="bollard" />
+				</item>
+				<item name="Panneau routier" icon="presets/vehicle/traffic_mirror.svg" type="node"
+					preset_name_label="true">
+					<key key="highway" value="traffic_sign" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Feu routier (poteau)" icon="presets/vehicle/traffic_signals.svg"
+					type="node"
+					preset_name_label="true">
+					<key key="highway" value="traffic_sign" />
+					<key key="description" value="poteau supportant un feu routier" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Poteau incendie" icon="presets/service/fire_hydrant.svg" type="node"
+					preset_name_label="true">
+					<key key="emergency" value="fire_hydrant" />
+					<key key="fire_hydrant:type" value="pillar" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+				<item name="Parcmètre" icon="presets/transport/ticket-machine.svg" type="node"
+					preset_name_label="true">
+					<key key="amenity" value="vending_machine" />
+					<key key="vending" value="parking_tickets" />
+					<key key="obstacle:wheelchair" value="yes" />
+				</item>
+			</group>
+			<item name="Escalier" icon="presets/transport/way/steps.svg" type="way">
+				<key key="highway" value="steps" />
+			</item>
+			<item name="Rampe" icon="presets/transport/passage/tunnel_avalanche_protector.svg"
+				type="way">
+				<key key="highway" value="footway" />
+				<key key="footway" value="ramp" />
+			</item>
+			<item name="Entrée d'ERP" icon="presets/misc/entrance_main.svg" type="node"
+				preset_name_label="true">
+				<key key="entrance" value="main" />
+				<key key="door" value="yes" />
+			</item>
+			<item name="Lien pour le routing" icon="presets/misc/route.svg" type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="link" />
+			</item>
+			<item name="Trottoir" icon="presets/transport/way/dedicated_footway.svg"
+				type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="sidewalk" />
+			</item>
+			<item name="Passage piéton (chemin)"
+				icon="presets/transport/way/way_living_street.svg"
+				type="way" preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="crossing" />
+			</item>
+			<item name="Passage piéton (noeud)" icon="presets/transport/way/way_road.svg"
+				type="node" preset_name_label="true">
+				<key key="highway" value="crossing" />
+			</item>
+			<item name="Quai de Tramway" icon="presets/transport/railway/tram.svg" type="node,way"
+				preset_name_label="true">
+				<key key="railway" value="platform" />
+				<key key="public_transport" value="platform" />
+				<key key="tram" value="yes" />
+			</item>
+			<item name="Arrêt de Bus" icon="presets/transport/bus.svg" type="node">
+				<key key="highway" value="bus_stop" />
+				<key key="public_transport" value="platform" match="none" />
+				<key key="bus" value="yes" match="none" />
+				<key key="operator" />
+				<key key="network" />
+				<key key="network:wikidata" />
+				<key key="operator:wikidata" />
+			</item>
+			<item name="Place de Parking Réservée PMR"
+				icon="presets/vehicle/parking/handicapped.svg" type="node,closedway">
+				<key key="amenity" value="parking_space" />
+				<key key="parking_space" value="disabled" />
+				<key key="capacity:disabled" value="1" />
+				<key key="capacity" value="1" />
+			</item>
+			<item name="Passage piéton partagé" type="way"
+				icon="presets/transport/way/combined_foot_cycleway.svg">
+				<key key="highway" value="path" />
+				<key key="path" value="crossing" />
+				<key key="foot" value="designated" />
+				<key key="bicycle" value="designated" />
+			</item>
+			<item name="Place piétonne" icon="presets/transport/way/way_pedestrian.svg"
+				type="closedway,multipolygon">
+				<key key="highway" value="pedestrian" />
+				<key key="area" value="yes" />
+			</item>
+			<item name="Rue piétonne" icon="presets/transport/way/way_pedestrian.svg" type="way">
+				<key key="highway" value="pedestrian" />
+			</item>
+			<item name="Zone de rencontre" icon="presets/transport/way/way_pedestrian.svg"
+				type="way">
+				<key key="highway" value="living_street" />
+			</item>
+			<item name="Piste Cyclable Partagée" icon="presets/transport/way/way_bicycle_road.svg"
+				type="way">
+				<key key="highway" value="path" />
+				<key key="bicycle" value="designated" />
+				<key key="foot" value="designated" />
+			</item>
+			<item name="Cul-de-sac" icon="presets/vehicle/restriction/dead_end.svg"
+				type="node">
+				<key key="noexit" value="yes" />
+			</item>
+			<item name="À continuer..." icon="presets/misc/fixme.svg"
+				type="node" preset_name_label="true">
+				<key key="fixme" value="continue" />
+			</item>
+			<item name="Ascenseur" icon="presets/service/elevator.svg"
+				type="node">
+				<key key="highway" value="elevator" />
+			</item>
+			<item name="Bordure de trottoir" icon="presets/barrier/kerb.svg"
+				type="node">
+				<key key="barrier" value="kerb" />
+			</item>
+			<item name="Bandes de guidage" icon="presets/transport/railway/miniature_rail.svg"
+				type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="guiding_strips" />
+				<key key="tactile_paving" value="yes" />
+			</item>
+			<item name="Îlot de refuge" icon="presets/vehicle/island.svg" type="way"
+				preset_name_label="true">
+				<key key="highway" value="footway" />
+				<key key="footway" value="traffic_island" />
+			</item>
+		</group>
+	</group>
+</presets>
