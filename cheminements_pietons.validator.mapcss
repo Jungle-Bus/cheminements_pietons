@@ -32,8 +32,8 @@ node[entrance]!.connected_entrance:in-downloaded-area {
     throwWarning: "Entrée non connectée aux cheminements piétons";
 }
 
-way[highway][highway=~/footway|pedestrian|path|living_street|steps/] >[index=-1] node[!noexit][!amenity][fixme!=continue]!:connection:in-downloaded-area,
-way[highway][highway=~/footway|pedestrian|path|living_street|steps/] >[index=1] node[!noexit][!amenity][fixme!=continue]!:connection:in-downloaded-area{
+way[highway][highway=~/footway|pedestrian|path|living_street|steps/] >[index=-1] node[!noexit][!amenity][!door][!highway][fixme!=continue]!:connection:in-downloaded-area,
+way[highway][highway=~/footway|pedestrian|path|living_street|steps/] >[index=1] node[!noexit][!amenity][!door][!highway][fixme!=continue]!:connection:in-downloaded-area{
 	throwError: "Cheminement non connecté aux autres cheminements piétons";
 }
 
