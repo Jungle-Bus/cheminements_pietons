@@ -8,15 +8,12 @@
 	version="0.3"
 	description="presets pour la cartographie des cheminements piétons">
 	<chunk id="flooring">
-		<combo key="surface" text="Surface"
-			values="asphalt,concrete,paving_stones,sett,fine_gravel,grass,ground,wood,metal" />
-		<combo key="smoothness" text="Smoothness">
-			<list_entry value="excellent" />
-			<list_entry value="good" />
-			<list_entry value="intermediate" />
-			<list_entry value="bad" />
-			<list_entry value="horrible" />
-		</combo>
+		<combo key="surface" text="Revêtement"
+			values="artificial_turf,asphalt,clay,compacted,concrete,concrete:lanes,concrete:plates,dirt,fine_gravel,grass,grass_paver,gravel,ground,metal,mud,paved,paving_stones,pebblestone,salt,sand,sett,tartan,unhewn_cobblestone,unpaved,wood,woodchips"
+			display_values="Gazon synthétique,Asphalte,Argile,Compactée,Béton,Ornières en plaques de béton,Plaques de béton,Terre,Graviers fins,Herbe,Pavés en gazon,Graviers,Sol,Métal,Boue permanente,Oui,Pavés en béton ou très réguliers,Galets,Sel,Sable,Pavés taillés,Tartan,Pavés (pierres brutes et arrondies),Non,Bois,Copeaux" />
+		<combo key="smoothness" text="État du revêtement"
+			values="excellent,good,intermediate,bad,very_bad,horrible,impassable"
+			display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible / dangereux,Impassable / Inutilisable" />
 	</chunk>
 
 	<group name="Cheminements Piétons" icon="pedestrian_logo.svg">
@@ -27,14 +24,32 @@
 					fr.href="http://wiki.openstreetmap.org/wiki/FR:Tag:highway=steps" />
 				<space />
 				<key key="highway" value="steps" />
-				<combo key="incline" text="Incline" values="up,down" default="up" />
+				<combo key="incline" text="Sens de l&apos;Inclinaison"
+					values="up,down"
+					display_values="Ça monte,Ça descend" />
+				<text key="step_count" text="Nombre de marches" value_type="integer" />
+				<combo key="handrail" text="Main courante"
+					values="rigth,left,both,center,no"
+					display_values="À droite uniquement,À gauche uniquement,De chaque côté,Au milieu (une seule main courante au centre),Pas de main courante" />
+				<combo key="tactile_paving" text="Bande d&apos;Éveil à la Vigilance"
+					values="partial,incorrect,yes,no"
+					display_values="En haut uniquement,En bas uniquement,En haut et en bas,Pas de BEV" />
+				<combo key="tactile_paving:condition" text="État d&apos;usure de la BEV"
+					values="excellent,good,intermediate,bad,very_bad,horrible"
+					display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible / dangereux" />
+				<combo key="step:stair_nosing" text="Nez de marches contrastés" values="yes,no" />
 				<optional>
-					<combo key="tactile_paving" text="BEV"
-						values="yes,partial,incorrect,no"
-						display_values="En haut et en bas,En haut,En bas,Pas de BEV" />
-					<combo key="handrail" text="Main Courante"
-						values="right,left,center,both,no"
-						display_values="À droite,À gauche,Au milieu,Des deux côtés,Pas de main courante" />
+					<reference ref="flooring" />
+					<text key="step:height" text="Hauteurs de la Marche (mètres)"
+						value_type="integer" />
+					<text key="step:length" text="Longueur de la Marche (mètres)"
+						value_type="integer" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+					<multiselect key="level" text="Niveaux"
+						values="0;1;2;-2;-1"
+						display_values="0 (Rez-de-chaussée);1;2;-2;-1" />
+					<check key="lit" text="Éclairé" />
 				</optional>
 			</item>
 			<item name="Rampe" icon="presets/transport/passage/tunnel_avalanche_protector.svg"
@@ -42,17 +57,46 @@
 				preset_name_label="true">
 				<key key="highway" value="footway" />
 				<key key="footway" value="ramp" />
-				<combo key="incline" text="Incline" values="up,down" default="up" />
 				<combo key="handrail" text="Main Courante"
 					values="right,left,center,both,no"
 					display_values="À droite,À gauche,Au milieu,Des deux côtés,Pas de main courante" />
+				<combo key="incline" text="Pente"
+					values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+					display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
 				<reference ref="flooring" />
+				<optional>
+					<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+					<text key="maxweight" text="« Poids » max (en précisant l&apos;unité)"
+						value_type="integer" />
+					<combo key="wheelchair:turning_cycle" text="Zone de manœuvre"
+						values="up,down,up;down,no"
+						display_values="Uniquement en haut de la rampe,Uniquement en bas de la rampe,En haut et en bas,Pas de zone de manœuvre" />
+				</optional>
 			</item>
 			<item name="Trottoir" icon="presets/transport/way/dedicated_footway.svg" type="way"
 				preset_name_label="true">
 				<key key="highway" value="footway" />
 				<key key="footway" value="sidewalk" />
 				<reference ref="flooring" />
+				<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+				<optional>
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="covered" text="Couvert" disable_off="true" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Bandes de guidage" icon="presets/transport/railway/miniature_rail.svg"
 				type="way">
@@ -60,12 +104,30 @@
 				<key key="footway" value="guiding_strips" />
 				<key key="tactile_paving" value="yes" />
 				<reference ref="flooring" />
+				<optional>
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+				</optional>
 			</item>
 			<item name="Îlot de refuge" icon="presets/vehicle/island.svg" type="way"
 				preset_name_label="true">
 				<key key="highway" value="footway" />
 				<key key="footway" value="traffic_island" />
 				<reference ref="flooring" />
+				<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+				<optional>
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Chemin piéton" icon="presets/transport/way/dedicated_footway.svg" type="way"
 				preset_name_label="true">
@@ -81,6 +143,21 @@
 						short_description="Access for back entrances and/or emergency access" />
 				</combo>
 				<reference ref="flooring" />
+				<optional>
+					<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="covered" text="Couvert" disable_off="true" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Piste Cyclable Partagée" icon="presets/transport/way/way_bicycle_road.svg"
 				type="way" preset_name_label="true">
@@ -91,28 +168,99 @@
 				<reference ref="flooring" />
 				<check key="segregated"
 					text="Voies vélo et piéton séparées" />
+				<optional>
+					<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="covered" text="Couvert" disable_off="true" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Place piétonne" icon="presets/transport/way/way_pedestrian.svg"
 				type="closedway,multipolygon" preset_name_label="true">
 				<key key="highway" value="pedestrian" />
 				<key key="area" value="yes" />
 				<reference ref="flooring" />
+				<optional>
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="covered" text="Couvert" disable_off="true" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Rue piétonne" icon="presets/transport/way/way_pedestrian.svg" type="way"
 				preset_name_label="true">
 				<key key="highway" value="pedestrian" />
 				<reference ref="flooring" />
+				<optional>
+					<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="covered" text="Couvert" disable_off="true" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Zone de rencontre" icon="presets/transport/way/way_pedestrian.svg"
 				living_streettype="way" preset_name_label="true">
 				<key key="highway" value="living_street" />
 				<reference ref="flooring" />
+				<optional>
+					<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="covered" text="Couvert" disable_off="true" />
+					<check key="indoor" text="En intérieur" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Passage piéton" icon="presets/transport/way/way_living_street.svg"
 				type="way" preset_name_label="true">
 				<key key="highway" value="footway" />
 				<key key="footway" value="crossing" />
 				<reference ref="flooring" />
+				<optional>
+					<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Passage piéton partagé" type="way"
 				icon="presets/transport/way/combined_foot_cycleway.svg">
@@ -123,25 +271,45 @@
 				<reference ref="flooring" />
 				<check key="segregated"
 					text="Voies vélo et piéton séparées" />
+				<optional>
+					<check key="guiding_strips" text="Bandes de Guidage" disable_off="true" />
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<check key="bridge" text="Pont" disable_off="true" />
+					<check key="tunnel" text="Tunnel" disable_off="true" />
+					<check key="lit" text="Éclairé" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+				</optional>
 			</item>
 			<item name="Noeud de passage piéton" icon="presets/vehicle/crossing.svg" type="node"
 				preset_name_label="true">
 				<key key="highway" value="crossing" />
-				<combo key="crossing" text="Pedestrian crossing type">
-					<list_entry value="uncontrolled" />
-					<list_entry value="traffic_signals" />
-					<list_entry value="unmarked" />
-				</combo>
 				<combo key="crossing:markings" text="Markings">
 					<list_entry value="zebra" icon="presets/vehicle/crossing_ref_zebra.svg" />
 					<list_entry value="surface" icon="presets/vehicle/crossing_markings_surface.svg" />
 					<list_entry value="pictograms" />
 					<list_entry value="no" icon="presets/vehicle/crossing_unmarked.svg" />
 				</combo>
-				<check key="crossing:island" text="With island" />
+				<check key="crossing:signals" text="Feu piéton" />
 				<optional>
-					<check key="tactile_paving" text="BEV" />
-					<check key="crossing:bollard" text="Potelets" />
+					<check key="crossing:island" text="With island" />
+					<combo key="crossing:markings:condition" text="État du marquage au sol"
+						values="excellent,good,intermediate,bad,very_bad,horrible"
+						display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible" />
+
+					<combo key="traffic_signals:sound" text="Feu sonore"
+						values="yes,no,locate,walk"
+						display_values="Oui,Non,Aide à la localisation du bouton,Feu de signalisation piétonnier" />
+					<combo key="highway:shape" text="Déformation de la Chaussée"
+						values="flat,bulged"
+						display_values="Chaussée plate,Chaussée Bombée" />
+					<combo key="crossing" text="Type"
+						values="traffic_signals,uncontrolled,unmarked"
+						display_values="Passage avec feux de signalisation,Traversée sans feu,Pas de marquage routiers ni de feux de signalisation" />
 				</optional>
 			</item>
 			<item name="Quai de Tramway" icon="presets/transport/railway/tram.svg" type="node,way"
@@ -150,6 +318,26 @@
 				<key key="public_transport" value="platform" />
 				<key key="tram" value="yes" />
 				<key key="departures_board" value="realtime" match="none" />
+				<check key="tactile_paving" text="Bande d&apos;Éveil à la Vigilance" />
+				<optional>
+					<reference ref="flooring" />
+					<text key="platform:height" text="Hauteur du quai (mètres)" value_type="integer" />
+					<text key="maxwidth:physical" text="Largeur utile (mètres)" value_type="integer" />
+					<combo key="tactile_paving:condition" text="État d&apos;usure de la BEV"
+						values="excellent,good,intermediate,bad,very_bad,horrible"
+						display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible / dangereux" />
+					<check key="wheelchair:turning_cycle" text="Zone de manœuvre" />
+					<text key="wheelchair:turning_cycle:diameter"
+						text="Diamètre de la zone de manœuvre (mètres)" value_type="integer" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+					<check key="covered" text="Couvert" />
+					<check key="lit" text="Éclairé" />
+				</optional>
 			</item>
 			<item name="Arrêt de Bus" icon="presets/transport/bus.svg" type="node"
 				preset_name_label="true">
@@ -163,6 +351,25 @@
 				<key key="network" />
 				<key key="network:wikidata" />
 				<key key="operator:wikidata" />
+				<check key="tactile_paving" text="Bande d&apos;Éveil à la Vigilance" />
+				<optional>
+					<reference ref="flooring" />
+					<text key="platform:height" text="Hauteur du quai (mètres)" value_type="integer" />
+					<text key="maxwidth:physical" text="Largeur utile (mètres)" value_type="integer" />
+					<combo key="tactile_paving:condition" text="État d&apos;usure de la BEV"
+						values="excellent,good,intermediate,bad,very_bad,horrible"
+						display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible / dangereux" />
+					<check key="wheelchair:turning_cycle" text="Zone de manœuvre" />
+					<text key="wheelchair:turning_cycle:diameter"
+						text="Diamètre de la zone de manœuvre (mètres)" value_type="integer" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+					<check key="lit" text="Éclairé" />
+				</optional>
 			</item>
 			<item name="Place de Parking Réservée PMR"
 				icon="presets/vehicle/parking/handicapped.svg" type="node,closedway"
@@ -171,8 +378,24 @@
 				<key key="parking_space" value="disabled" />
 				<key key="capacity:disabled" value="1" />
 				<key key="capacity" value="1" />
-				<combo key="orientation" text="Orientation" values="diagonal,parallel,perpendicular" />
+				<combo key="orientation" text="Orientation"
+					values="parallel,diagonal,perpendicular"
+					display_values="Créneau,Épi,Bataille" />
 				<reference ref="flooring" />
+				<optional>
+					<text key="width" text="Largeur (mètres)" value_type="integer" />
+					<text key="length" text="Longueur (mètres)" value_type="integer" />
+					<combo key="markings" text="Signalisation de la place"
+						values="traffic_sign,pictograms,traffic_sign;pictograms ,no"
+						display_values="Panneau routier,Pictogrammes paints,Panneau et pictogrammes,Pas de signalisation" />
+					<combo key="incline" text="Pente"
+						values="0%,3%,5%,8%,12%,-3%,-5%,-8%,-12%"
+						display_values="plat (0%),légèrement en pente (3%),pentu (5%),très pentu (8%),vraiment très pentu (12%),légèrement en pente (-3%),pentu (-5%),très pentu (-8%),vraiment très pentu (-12%)" />
+					<combo key="incline:across" text="Pente Latérale"
+						values="0%,2%,5%,-2%,-5%"
+						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
+					<text key="length:buffer" text="Sur-longueur (mètres)" value_type="integer" />
+				</optional>
 			</item>
 			<item name="Mobilier publicitaire" icon="presets/leisure/poster_box.svg" type="node"
 				preset_name_label="true">
@@ -180,6 +403,30 @@
 				<combo key="advertising" text="Type de support"
 					values="billboard,column,poster_box,totem"
 					display_values="Sucette grand format (on passe en dessous),Colonne,Sucette petit format (à contourner),Totem" />
+				<check key="obstacle:blind" text="Obstacle pour les déficients visuels ?" />
+				<optional>
+					<text key="height" text=" Hauteur de l'obstacle(mètres)" value_type="integer" />
+					<text key="maxwidth:physical"
+						text="Largeur de passage (en contournant l'obstacle)" />
+					<text key="width" text="Largeur de l'obstacle (mètres)" value_type="integer" />
+					<text key="length" text="Longueur de l'obstacle (mètres)" value_type="integer" />
+					<check key="visual_contrast" text="Contraste Visuel" />
+					<combo key="tactile_warning" text="Signalement tactile"
+						values_context="obstacle:blind">
+						<list_entry value="kerb"
+							short_description="surépaisseur au sol sous l'obstacle (au moins 3 cm)" />
+						<list_entry value="pole"
+							short_description="pilier / poteau" />
+						<list_entry value="bar"
+							short_description="élément bas type barre en travers (à max 40 cm de hauteur)" />
+						<list_entry value="yes"
+							short_description="autre élément détectable avec une canne blanche" />
+						<list_entry value="no"
+							short_description="Pas de rappel tactile" />
+					</combo>
+					<text key="min_height" text="Hauteur sous obstacle (mètres)"
+						value_type="integer" />
+				</optional>
 			</item>
 			<item name="Obstacle au déplacement" icon="presets/barrier/log.svg" type="node"
 				preset_name_label="true">
@@ -193,14 +440,19 @@
 			<item name="Obstacle aveugles" icon="presets/barrier/height_restrictor.svg" type="node"
 				preset_name_label="true">
 				<key key="obstacle:blind" value="yes" match="key" />
-				<text key="min_height" text="Hauteur sous obstacle" />
+				<text key="min_height" text="Hauteur sous obstacle (mètres)"
+					value_type="integer" />
 				<combo key="tactile_warning" text="Signalement tactile"
 					values_context="obstacle:blind">
 					<list_entry value="kerb"
 						short_description="surépaisseur au sol sous l'obstacle (au moins 3 cm)" />
 					<list_entry value="pole"
-						short_description="élément bas type pilier (à max 40 cm de hauteur)" />
-					<list_entry value="none"
+						short_description="pilier / poteau" />
+					<list_entry value="bar"
+						short_description="élément bas type barre en travers (à max 40 cm de hauteur)" />
+					<list_entry value="yes"
+						short_description="autre élément détectable avec une canne blanche" />
+					<list_entry value="no"
 						short_description="Pas de rappel tactile" />
 				</combo>
 			</item>
