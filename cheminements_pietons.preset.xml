@@ -129,6 +129,48 @@
 						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
 				</optional>
 			</item>
+			<item name="Ascenseur" icon="presets/service/elevator.svg"
+				type="node,closedway,multipolygon" preset_name_label="true">
+				<key key="highway" value="elevator" />
+				<multiselect key="level" text="Niveaux"
+					values="0;1;2;-2;-1"
+					display_values="0 (Rez-de-chaussée);1;2;-2;-1" />
+				<check key="indoor" text="En intérieur" disable_off="true" />
+				<text key="door:width" text="Largeur de la porte (mètres)" value_type="integer" />
+				<text key="width" text="Largeur (mètres)" value_type="integer" />
+				<text key="length" text="Longueur (mètres)" value_type="integer" />
+				<check key="speech_output"
+					text="Annonces sonores de prise en compte des boutons sélectionnés" />
+				<check key="announcement" text="Annonces sonores de l&apos;étage atteint" />
+				<check key="visual_announcement" text="Affichage de l&apos;étage atteint" />
+				<check key="audio_loop" text="Boucle à Inducation Magnétique" />
+				<check key="emergency_button" text="Bouton d&apos;Appel d&apos;Urgence" />
+				<check key="automatic_door" text="Porte Automatique" />
+				<check key="tactile_paving" text="Bande d&apos;Éveil à la Vigilance" />
+				<combo key="tactile_paving:condition" text="État d&apos;usure de la BEV"
+					values="excellent,good,intermediate,bad,very_bad,horrible"
+					display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible / dangereux" />
+				<optional>
+					<text key="ref" text="Code d&apos;identification" />
+					<text key="maxweight" text="« Poids » max (en précisant l&apos;unité)"
+						value_type="integer" />
+					<check key="elevator:mirror" text="A un miroir" />
+					<check key="lit" text="Est éclairé" />
+					<combo key="handrail" text="Main courante"
+						values="rigth,left,both,center,no"
+						display_values="À droite uniquement,À gauche uniquement,De chaque côté,Au milieu (une seule main courante, au centre),Pas de main courante" />
+					<text key="handrail:height" text="Hauteur de la Main Courante (Mètres)"
+						value_type="integer" />
+					<check key="wheelchair:turning_cycle" text="Présence d'une zone de manœuvre" />
+					<text key="wheelchair:turning_cycle:diameter"
+						text="Diamètre de la zone de manœuvre (mètres)" value_type="integer" />
+					<combo key="smoothness" text="État du revêtement"
+						values="excellent,good,intermediate,bad,very_bad,horrible,impassable"
+						display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible / dangereux,Impassable / Inutilisable" />
+					<combo key="supervised" text="Supervisé par un agent" values="yes,no" />
+				</optional>
+			</item>
+
 			<item name="Chemin piéton" icon="presets/transport/way/dedicated_footway.svg" type="way"
 				preset_name_label="true">
 				<key key="highway" value="footway" />
@@ -395,6 +437,55 @@
 						values="0%,2%,5%,-2%,-5%"
 						display_values="plat (0%),léger dévers à droite (2%),gros dévers à droite (5%),léger dévers à gauche (-2%),gros dévers à gauche (-5%)" />
 					<text key="length:buffer" text="Sur-longueur (mètres)" value_type="integer" />
+				</optional>
+			</item>
+			<item name="Porte" icon="presets/shop/doors.svg" type="node"
+				preset_name_label="true">
+				<combo key="door" text="Type de porte"
+					values="hinged,sliding,revolving,folding,yes,no"
+					display_values="porte battante,porte coulissante,porte tambour,porte accordéon,porte non spécifiée,pas de porte" />
+				<combo key="entrance:ramp" text="Rampe amovible" values="yes,no" />
+				<combo key="material" text="Matériau"
+					values="adobe,aluminium,brass,brick,bronze,concrete,dry_stone,glass,granite,iron,limestone,marble,metal,plastic,reinforced_concrete,rock,sand,sandstone,soil,steel,stone,wood"
+					display_values="Adobe,Aluminium,Laiton,Brique,Bronze,Béton,Pierre sèche,Verre / Matériau transparent,Granit,Fer,Calcaire,Marbre,Métal,Plastique,Béton armé,Roche,Sable,Grès,Terre,Acier,Pierre,Bois" />
+				<combo key="entrance:coloured_band"
+					text="Bandes colorées sur vitre transparante (vitrophanie)" values="yes,no" />
+				<text key="width" text="Largeur (mètres)" value_type="integer" />
+				<check key="automatic_door" text="Porte Automatique" />
+				<check key="tactile_paving" text="Bande d&apos;Éveil à la Vigilance" />
+				<combo key="tactile_paving:condition" text="État d&apos;usure de la BEV"
+					values="excellent,good,intermediate,bad,very_bad,horrible"
+					display_values="Excellent,Bon état,État moyen,Mauvais état / Inconforts d&apos;usage,Très mauvais état,Horrible / dangereux" />
+				<combo key="wheelchair:turning_cycle" text="Zone de manœuvre"
+					values="inside,outside,inside;outside,no"
+					display_values="Uniquement à l&apos;intérieur,Uniquement à l&apos;extérieur,À l&apos;intérieur et à l&apos;extérieur,Pas de zone de manœuvre" />
+				<text key="kerb:height" text="Hauteur de la marche à l'entrée (mètres)"
+					value_type="integer" />
+				<optional>
+					<text key="ref" text="Code d&apos;identification" />
+					<combo key="entrance" text="Type d'entrée"
+						values="yes,main,secondary,service,shop,exit,entrance,emergency,staircase,home,garage"
+						display_values="Non précisé,Principale,Secondaire,Service,Entrée de commerce,Sortie uniquement,Entrée uniquement,Sortie de secours,Cage d&apos;escalier,Maison privée ou appartement,Porte de garage" />
+					<combo key="level" text="Niveau (étage)"
+						values="0,1,2,-2,-1"
+						display_values="0 (Rez-de-chaussée),1,2,-2,-1" />
+					<check key="wheelchair:call_button" text="Sonnette pour aide à l&apos;accès PMR" />
+					<check key="lit" text="Est éclairée" />
+				</optional>
+			</item>
+			<item name="Accueil" icon="presets/misc/information/informationoffice.svg" type="node"
+				preset_name_label="true">
+				<key key="amenity" value="reception_desk" />
+				<check key="audio_loop" text="Boucle à Inducation Magnétique" />
+				<combo key="wheelchair" text="Accès en fauteuil roulant"
+					values="designated,yes,limited,no"
+					display_values="À destination exclusive des UFR,Oui,Limité,Non" />
+				<check key="indoor" text="En intérieur" disable_off="true" />
+				<combo key="level" text="Niveau (étage)"
+					values="0,1,2,-2,-1"
+					display_values="0 (Rez-de-chaussée),1,2,-2,-1" />
+				<optional>
+					<check key="lit" text="Est éclairé" />
 				</optional>
 			</item>
 			<item name="Mobilier publicitaire" icon="presets/leisure/poster_box.svg" type="node"
